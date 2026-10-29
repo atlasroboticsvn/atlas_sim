@@ -1,10 +1,130 @@
+<div align="center">
+
 # Atlas Sim
 
-Robot diff-drive mô phỏng trên ROS 2 Humble + Gazebo Fortress, làm nền cho khóa học ROS 2 & Navigation2. Bài học của khóa nằm trên [atlasroboticsvn.com](https://atlasroboticsvn.com/khoa-hoc/ros2-nav2); repo này chỉ chứa mã nguồn.
+### Học ROS 2 & Navigation2 trên robot mô phỏng thật:<br>từ node đầu tiên tới robot tự vẽ bản đồ và tự đi tới đích
 
-File này chỉ để **nhớ lại cách chạy** sau một thời gian không đụng vào dự án — không phải tài liệu học.
+[![ROS 2 Humble](https://img.shields.io/badge/ROS_2-Humble-22314E?logo=ros&logoColor=white)](https://docs.ros.org/en/humble/)
+[![Gazebo Fortress](https://img.shields.io/badge/Gazebo-Fortress-F58113)](https://gazebosim.org/docs/fortress)
+[![Nav2](https://img.shields.io/badge/Nav2-SLAM_%C2%B7_AMCL_%C2%B7_Behavior_Tree-0A7BBB)](https://docs.nav2.org/)
+[![Ubuntu 22.04](https://img.shields.io/badge/Ubuntu-22.04-E95420?logo=ubuntu&logoColor=white)](https://releases.ubuntu.com/jammy/)
+[![Khóa học](https://img.shields.io/badge/Kh%C3%B3a_h%E1%BB%8Dc-14_module_%C2%B7_92_b%C3%A0i_%C2%B7_~21_gi%E1%BB%9D-2EA44F)](https://atlasroboticsvn.com/vi/khoa-hoc/ros2-nav2)
 
-## Stack
+<a href="https://atlasroboticsvn.com/vi/khoa-hoc/ros2-nav2/module-0/00-cai-dat"><b>▶&nbsp; Học thử miễn phí</b></a> &nbsp;&nbsp;·&nbsp;&nbsp;
+<a href="https://atlasroboticsvn.com/vi/khoa-hoc/ros2-nav2"><b>Xem đề cương khóa học</b></a> &nbsp;&nbsp;·&nbsp;&nbsp;
+<a href="https://atlasroboticsvn.com/vi/hoi-vien"><b>Mở khóa trọn đời</b></a>
+
+</div>
+
+<br>
+
+<table>
+<tr>
+<td width="50%" valign="top">
+<img src="assets/readme/slam.gif" width="100%" alt="Robot Atlas quét LiDAR trong Gazebo, slam_toolbox ghép thành bản đồ">
+<br><b>Dựng bản đồ bằng SLAM</b> · Module 8
+<br><sub>Robot quét LiDAR trong Gazebo, slam_toolbox ghép thành bản đồ</sub>
+</td>
+<td width="50%" valign="top">
+<img src="assets/readme/nav2.gif" width="100%" alt="Nav2 lập đường đi trên bản đồ vừa dựng và né vật cản tới đích">
+<br><b>Tự điều hướng bằng Nav2</b> · Module 9–12
+<br><sub>Trên bản đồ vừa dựng, Nav2 lập đường đi và né vật cản tới đích</sub>
+</td>
+</tr>
+</table>
+
+<p align="center"><sub>Quay thật từ Gazebo + RViz, tua nhanh 1.5×. Xem bản đầy đủ trên <a href="https://atlasroboticsvn.com/vi/khoa-hoc/ros2-nav2">trang khóa học</a>.</sub></p>
+
+## Học xong, robot Atlas của bạn làm được gì
+
+Một robot diff-drive mang LiDAR và IMU, chạy trong Gazebo. Qua từng module, bạn tự dựng nó lên đến khi
+nó tự đi làm nhiệm vụ:
+
+| Kỹ năng | Bạn tự làm được |
+|---|---|
+| 🧱 **Dựng robot** | URDF/XACRO, đưa vào Gazebo, `ros2_control` cho bánh xe chạy theo `/cmd_vel` |
+| 📡 **Đọc cảm biến** | LiDAR và IMU: ý nghĩa từng trường dữ liệu, xem trực tiếp trong RViz |
+| 🎮 **Lái an toàn** | Bàn phím, joystick, trộn nhiều nguồn lệnh qua `twist_mux`, lớp an toàn `collision_monitor` |
+| 🗺️ **Vẽ bản đồ** | `slam_toolbox`: scan matching, pose graph, loop closure |
+| 📍 **Định vị** | AMCL (particle filter) trên bản đồ có sẵn, so với `slam_toolbox` localization |
+| 🧭 **Tự điều hướng** | Nav2: costmap, global planner, local controller; so 3 controller DWB, RPP, MPPI |
+| 🌳 **Behavior Tree** | Đọc cây BT thật đang chạy, xem tick lan truyền, 4 recovery behavior |
+| 🚚 **Đồ án "Atlas Delivery"** | Ghép SLAM, AMCL, Nav2, BT và `patrol_node.py` tự viết, có log thời gian, quãng đường, số lần recovery |
+
+## Vì sao học ở đây
+
+- **Thấy dữ liệu chuyển động.** Mỗi bài có mô hình chạy ngay trên trang: message bay qua các tầng, node
+  tìm nhau, hàng đợi đầy dần. Bấm tạm dừng, chậm lại 0.5× khi cần.
+- **Code thật, không phải ví dụ rút gọn.** Mọi file cấu hình phân tích trong khóa là file đang chạy trong
+  chính repo này.
+- **Lỗi thật, cách sửa thật.** Khóa giữ lại những lỗi đã gặp khi làm dự án: `vx_max`/`wz_max` vượt giới hạn
+  phần cứng, bản đồ SLAM "nhảy" vì world đối xứng, `twist_mux` âm thầm kẹp priority về 255… và cách tìm ra
+  từng lỗi.
+- **Tiếng Việt**, thuật ngữ kỹ thuật giữ nguyên tiếng Anh.
+
+## Lộ trình: 14 module · 92 bài · khoảng 21 giờ
+
+| Module | Nội dung | Bài | Mở cho |
+|:---:|---|:---:|:---:|
+| 0 | Cài đặt môi trường | 1 | 🆓 |
+| 1 | ROS 2 Core Concepts: node, topic, service, parameter, launch | 9 | 🆓 |
+| 2 | TF2 & tọa độ: frame, cây TF, REP-103/105 | 6 | 🆓 |
+| 3 | URDF/XACRO | 8 | 🔑 |
+| 4 | Đưa robot vào Gazebo | 8 | 🔑 |
+| 5 | ros2_control | 8 | 🔑 |
+| 6 | Cảm biến: LiDAR & IMU | 8 | 🔑 |
+| 7 | Teleoperation & RViz | 8 | 🔑 |
+| 8 | SLAM | 8 | ⭐ |
+| 9 | Localization với AMCL | 7 | ⭐ |
+| 10 | **Nav2 core** (module trọng tâm) | 8 | ⭐ |
+| 11 | Recovery & Behavior Tree | 6 | ⭐ |
+| 12 | Waypoint & Nav2 Simple Commander | 4 | ⭐ |
+| 13 | Đồ án cuối khóa (Capstone) | 3 | ⭐ |
+
+🆓 đọc ngay, không cần tài khoản &nbsp;·&nbsp; 🔑 đăng nhập miễn phí &nbsp;·&nbsp; ⭐ hội viên
+
+<div align="center">
+
+### Hội viên trọn đời: ~~999.000đ~~ **599.000đ**, trả một lần
+
+Mở Module 8–13: SLAM, AMCL, Nav2, Behavior Tree và đồ án cuối khóa.
+
+<a href="https://atlasroboticsvn.com/vi/hoi-vien"><b>→ Trở thành hội viên</b></a> &nbsp;&nbsp;·&nbsp;&nbsp; <a href="https://atlasroboticsvn.com/vi/khoa-hoc/ros2-nav2/module-0/00-cai-dat"><b>Hoặc học thử Module 0 trước</b></a>
+
+</div>
+
+## Chạy thử ngay
+
+Cần Ubuntu 22.04 đã cài ROS 2 Humble. Hướng dẫn cài từng bước có trong [Module 0 (miễn phí)](https://atlasroboticsvn.com/vi/khoa-hoc/ros2-nav2/module-0/00-cai-dat).
+
+```bash
+sudo apt-get install -y ros-humble-ros-gz ros-humble-gz-ros2-control \
+  ros-humble-slam-toolbox ros-humble-navigation2 ros-humble-nav2-bringup \
+  ros-humble-teleop-twist-keyboard ros-humble-joy ros-humble-teleop-twist-joy \
+  ros-humble-twist-mux
+git clone https://github.com/atlasroboticsvn/atlas_sim.git ~/atlas_sim
+cd ~/atlas_sim && source /opt/ros/humble/setup.bash && colcon build && source install/setup.bash
+
+# Terminal 1: mô phỏng
+ros2 launch atlas_bringup bringup.launch.py world:=maze.sdf
+# Terminal 2: lái bằng bàn phím
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+```
+
+## Các package (theo thứ tự phụ thuộc)
+
+| Package | Vai trò | Module |
+|---|---|---|
+| `atlas_description` | URDF/XACRO, RViz xem robot (không cần Gazebo) | 3 |
+| `atlas_gazebo` | Spawn robot vào Gazebo Fortress, world (`empty.sdf`, `maze.sdf`), sensor LiDAR+IMU | 4, 6 |
+| `atlas_control` | `ros2_control` + `diff_drive_controller`, robot chạy được bằng `/cmd_vel` | 5 |
+| `atlas_slam` | `slam_toolbox` tự vẽ bản đồ, lưu map; Nav2 (định vị AMCL hoặc slam_toolbox, costmap/planner/controller, 3 file config DWB/RPP/MPPI) | 8-10 |
+| `atlas_bringup` | Điểm khởi chạy chung: `bringup.launch.py` (mô phỏng), joystick teleop qua `twist_mux` | 7 (mở rộng) |
+
+Chỉ `atlas_control` tự include `atlas_gazebo` (spawn + control là 1 tầng "bringup" liền mạch); `atlas_bringup/bringup.launch.py` chỉ include lại `atlas_control/controller.launch.py`, không viết lại logic. Từ `atlas_slam`/`atlas_bringup` (các launch còn lại) trở lên, mỗi package là ứng dụng ĐỘC LẬP với bringup — luôn cần chạy `atlas_bringup bringup.launch.py` riêng ở terminal khác trước, rồi mới chạy package bạn cần (xem ví dụ lệnh bên dưới, luôn có "Terminal 1: bringup"). Chạy thẳng `atlas_control controller.launch.py` vẫn được (dùng khi chỉ làm việc trong phạm vi package đó, vd Module 5). Lái tay dùng thẳng `teleop_twist_keyboard` (gói chuẩn ROS 2) + tự mở RViz — không có package `atlas_teleop` riêng (đã bỏ, chỉ là 1 file `.rviz` cấu hình sẵn, không đáng 1 package).
+
+<details>
+<summary><b>Stack và build</b></summary>
 
 - Ubuntu 22.04 + **ROS 2 Humble**
 - **Gazebo Fortress** (gz-sim, cài qua `ros-humble-ros-gz` — KHÔNG phải Gazebo Classic)
@@ -21,7 +141,7 @@ sudo apt-get install -y ros-humble-ros-gz ros-humble-gz-ros2-control \
   ros-humble-twist-mux
 ```
 
-## Build
+### Build
 
 ```bash
 cd ~/atlas_sim
@@ -31,19 +151,10 @@ source install/setup.bash
 ```
 Phải `source install/setup.bash` lại mỗi khi mở terminal mới (hoặc thêm vào `~/.bashrc`).
 
-## Các package đã có (theo thứ tự phụ thuộc)
+</details>
 
-| Package | Vai trò | Module |
-|---|---|---|
-| `atlas_description` | URDF/XACRO, RViz xem robot (không cần Gazebo) | 3 |
-| `atlas_gazebo` | Spawn robot vào Gazebo Fortress, world (`empty.sdf`, `maze.sdf`), sensor LiDAR+IMU | 4, 6 |
-| `atlas_control` | `ros2_control` + `diff_drive_controller`, robot chạy được bằng `/cmd_vel` | 5 |
-| `atlas_slam` | `slam_toolbox` tự vẽ bản đồ, lưu map; Nav2 (định vị AMCL hoặc slam_toolbox, costmap/planner/controller, 3 file config DWB/RPP/MPPI) | 8-10 |
-| `atlas_bringup` | Điểm khởi chạy chung: `bringup.launch.py` (mô phỏng), joystick teleop qua `twist_mux` | 7 (mở rộng) |
-
-Chỉ `atlas_control` tự include `atlas_gazebo` (spawn + control là 1 tầng "bringup" liền mạch); `atlas_bringup/bringup.launch.py` chỉ include lại `atlas_control/controller.launch.py`, không viết lại logic. Từ `atlas_slam`/`atlas_bringup` (các launch còn lại) trở lên, mỗi package là ứng dụng ĐỘC LẬP với bringup — luôn cần chạy `atlas_bringup bringup.launch.py` riêng ở terminal khác trước, rồi mới chạy package bạn cần (xem ví dụ lệnh bên dưới, luôn có "Terminal 1: bringup"). Chạy thẳng `atlas_control controller.launch.py` vẫn được (dùng khi chỉ làm việc trong phạm vi package đó, vd Module 5). Lái tay dùng thẳng `teleop_twist_keyboard` (gói chuẩn ROS 2) + tự mở RViz — không có package `atlas_teleop` riêng (đã bỏ, chỉ là 1 file `.rviz` cấu hình sẵn, không đáng 1 package).
-
-## Lệnh chạy nhanh
+<details>
+<summary><b>Lệnh chạy đầy đủ: RViz, Gazebo, SLAM, joystick, Nav2</b></summary>
 
 **Chỉ xem robot trong RViz (không Gazebo):**
 ```bash
@@ -114,7 +225,10 @@ ros2 run atlas_slam send_goal_and_time.py --goal_x -1.5 --goal_y 1.8
 ```
 So sánh 3 controller: chạy lại `navigation.launch.py` với `controller:=` khác nhau, gửi cùng 1 goal, so thời gian + quan sát độ mượt quỹ đạo trong RViz.
 
-## Mẹo/lỗi hay gặp (đã tự vấp phải khi làm)
+</details>
+
+<details>
+<summary><b>Mẹo và lỗi hay gặp (đã tự vấp khi làm dự án)</b></summary>
 
 - **`gz sim` không chạy được** → dùng `ign gazebo` thay thế. Bản Fortress (gz-sim 6) chưa có cú pháp CLI `gz sim`, đó là quy ước từ Garden/Harmonic trở đi. Mở Gazebo trắng để xem giao diện: `ign gazebo`.
 - **Bấm phím trong `teleop_twist_keyboard` mà robot không nhúc nhích** → phải chạy bằng `ros2 run` ở terminal riêng, không phải qua `ros2 launch` (launch không đảm bảo forward bàn phím vào tiến trình con).
@@ -130,3 +244,15 @@ So sánh 3 controller: chạy lại `navigation.launch.py` với `controller:=` 
 - **`localization:=slam_toolbox map:=...` không load map, tự quét map mới** → slam_toolbox (khác AMCL) đòi hỏi biết pose ban đầu NGAY LÚC LAUNCH (`map_start_pose`), thiếu nó sẽ báo lỗi `Map starting pose not specified` rồi coi như quét map mới toanh — dễ nhầm tưởng map không load được. Phải truyền `initial_pose_x/y/yaw:=` khớp vị trí robot lúc launch. Ngoài ra `map:=` giờ dùng CHUNG cho cả 2 kiểu định vị (trước đó có bug: `map:=` chỉ ảnh hưởng AMCL, slam_toolbox âm thầm dùng map mặc định khác — đã sửa).
 - **Truyền list qua `RewrittenYaml` bị ghi thành string, không phải array** → `param_rewrites` với `convert_types=True` chỉ tự chuyển kiểu scalar (bool/int/float), không parse được cú pháp list `"[x, y, z]"` — ghi thẳng chuỗi đó vào YAML sẽ làm node đọc sai kiểu tham số và crash (SIGABRT). Muốn truyền tham số kiểu mảng với giá trị lấy từ launch argument, phải dùng `OpaqueFunction` để `.perform(context)` từng phần tử rồi tự ghép thành list Python thật (xem `_make_slam_toolbox_node` trong `navigation.launch.py`) — không có cách nào làm việc này thuần qua `RewrittenYaml`.
 - **Bản đồ SLAM thỉnh thoảng "nhảy" 1 phát rồi lệch/lỗi luôn** → world `maze.sdf` cũ có đối xứng tâm 180° hoàn hảo (2 vách trong là ảnh gương của nhau), khiến `slam_toolbox` thỉnh thoảng nhầm 2 vị trí đối xứng là cùng 1 chỗ (loop closure sai). Thử fix nhẹ (thêm 1 cột mốc phá đối xứng) không đủ dứt khoát, lỗi vẫn còn — đã **thiết kế lại toàn bộ world** thành mê cung hình chữ Z, 3 vách dài khác nhau (3.0/2.5/4.1m), phòng ngoài không vuông (7x5m), không còn phép quay/lật nào biến layout thành chính nó. Kèm siết ngưỡng `loop_match_minimum_response_coarse/fine` (0.35/0.45 → 0.45/0.55) trong `atlas_slam/config/mapper_params.yaml` làm lớp phòng vệ thứ 2. Nếu tự vẽ world khác, tránh thiết kế đối xứng/ít đặc trưng — đây là nguyên nhân phổ biến gây lỗi SLAM.
+
+</details>
+
+---
+
+<div align="center">
+
+**[Atlasbot](https://atlasroboticsvn.com)** · khóa học robotics bằng tiếng Việt
+
+Thấy repo hữu ích? Cho một ⭐ để nhiều người biết đến hơn.
+
+</div>
