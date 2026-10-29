@@ -1,6 +1,6 @@
 # Atlas Sim
 
-Robot diff-drive mô phỏng trên ROS 2 Humble + Gazebo Fortress, làm nền cho khóa học ROS 2 & Navigation2. Xem ý tưởng/lộ trình đầy đủ ở [docs/](docs/README.md).
+Robot diff-drive mô phỏng trên ROS 2 Humble + Gazebo Fortress, làm nền cho khóa học ROS 2 & Navigation2. Bài học của khóa nằm trên [atlasroboticsvn.com](https://atlasroboticsvn.com/khoa-hoc/ros2-nav2); repo này chỉ chứa mã nguồn.
 
 File này chỉ để **nhớ lại cách chạy** sau một thời gian không đụng vào dự án — không phải tài liệu học.
 
@@ -130,7 +130,3 @@ So sánh 3 controller: chạy lại `navigation.launch.py` với `controller:=` 
 - **`localization:=slam_toolbox map:=...` không load map, tự quét map mới** → slam_toolbox (khác AMCL) đòi hỏi biết pose ban đầu NGAY LÚC LAUNCH (`map_start_pose`), thiếu nó sẽ báo lỗi `Map starting pose not specified` rồi coi như quét map mới toanh — dễ nhầm tưởng map không load được. Phải truyền `initial_pose_x/y/yaw:=` khớp vị trí robot lúc launch. Ngoài ra `map:=` giờ dùng CHUNG cho cả 2 kiểu định vị (trước đó có bug: `map:=` chỉ ảnh hưởng AMCL, slam_toolbox âm thầm dùng map mặc định khác — đã sửa).
 - **Truyền list qua `RewrittenYaml` bị ghi thành string, không phải array** → `param_rewrites` với `convert_types=True` chỉ tự chuyển kiểu scalar (bool/int/float), không parse được cú pháp list `"[x, y, z]"` — ghi thẳng chuỗi đó vào YAML sẽ làm node đọc sai kiểu tham số và crash (SIGABRT). Muốn truyền tham số kiểu mảng với giá trị lấy từ launch argument, phải dùng `OpaqueFunction` để `.perform(context)` từng phần tử rồi tự ghép thành list Python thật (xem `_make_slam_toolbox_node` trong `navigation.launch.py`) — không có cách nào làm việc này thuần qua `RewrittenYaml`.
 - **Bản đồ SLAM thỉnh thoảng "nhảy" 1 phát rồi lệch/lỗi luôn** → world `maze.sdf` cũ có đối xứng tâm 180° hoàn hảo (2 vách trong là ảnh gương của nhau), khiến `slam_toolbox` thỉnh thoảng nhầm 2 vị trí đối xứng là cùng 1 chỗ (loop closure sai). Thử fix nhẹ (thêm 1 cột mốc phá đối xứng) không đủ dứt khoát, lỗi vẫn còn — đã **thiết kế lại toàn bộ world** thành mê cung hình chữ Z, 3 vách dài khác nhau (3.0/2.5/4.1m), phòng ngoài không vuông (7x5m), không còn phép quay/lật nào biến layout thành chính nó. Kèm siết ngưỡng `loop_match_minimum_response_coarse/fine` (0.35/0.45 → 0.45/0.55) trong `atlas_slam/config/mapper_params.yaml` làm lớp phòng vệ thứ 2. Nếu tự vẽ world khác, tránh thiết kế đối xứng/ít đặc trưng — đây là nguyên nhân phổ biến gây lỗi SLAM.
-
-## Còn thiếu (theo lộ trình, xem [docs/02-lo-trinh-khoa-hoc.md](docs/02-lo-trinh-khoa-hoc.md))
-
-Module 12 (waypoint app qua `nav2_simple_commander`) → Module 13 (capstone) chưa làm.

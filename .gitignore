@@ -12,3 +12,7 @@ __pycache__/
 .idea/
 *.swp
 .DS_Store
+
+# khung bài học (bản nháp để làm khóa học trên web) chỉ giữ trên máy, không commit
+docs/
+learn-web/
