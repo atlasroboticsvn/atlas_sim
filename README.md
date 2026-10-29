@@ -42,14 +42,14 @@ nó tự đi làm nhiệm vụ:
 
 | Kỹ năng | Bạn tự làm được |
 |---|---|
-| 🧱 **Dựng robot** | URDF/XACRO, đưa vào Gazebo, `ros2_control` cho bánh xe chạy theo `/cmd_vel` |
-| 📡 **Đọc cảm biến** | LiDAR và IMU: ý nghĩa từng trường dữ liệu, xem trực tiếp trong RViz |
-| 🎮 **Lái an toàn** | Bàn phím, joystick, trộn nhiều nguồn lệnh qua `twist_mux`, lớp an toàn `collision_monitor` |
-| 🗺️ **Vẽ bản đồ** | `slam_toolbox`: scan matching, pose graph, loop closure |
-| 📍 **Định vị** | AMCL (particle filter) trên bản đồ có sẵn, so với `slam_toolbox` localization |
-| 🧭 **Tự điều hướng** | Nav2: costmap, global planner, local controller; so 3 controller DWB, RPP, MPPI |
-| 🌳 **Behavior Tree** | Đọc cây BT thật đang chạy, xem tick lan truyền, 4 recovery behavior |
-| 🚚 **Đồ án "Atlas Delivery"** | Ghép SLAM, AMCL, Nav2, BT và `patrol_node.py` tự viết, có log thời gian, quãng đường, số lần recovery |
+| **Dựng robot** | URDF/XACRO, đưa vào Gazebo, `ros2_control` cho bánh xe chạy theo `/cmd_vel` |
+| **Đọc cảm biến** | LiDAR và IMU: ý nghĩa từng trường dữ liệu, xem trực tiếp trong RViz |
+| **Lái an toàn** | Bàn phím, joystick, trộn nhiều nguồn lệnh qua `twist_mux`, lớp an toàn `collision_monitor` |
+| **Vẽ bản đồ** | `slam_toolbox`: scan matching, pose graph, loop closure |
+| **Định vị** | AMCL (particle filter) trên bản đồ có sẵn, so với `slam_toolbox` localization |
+| **Tự điều hướng** | Nav2: costmap, global planner, local controller; so 3 controller DWB, RPP, MPPI |
+| **Behavior Tree** | Đọc cây BT thật đang chạy, xem tick lan truyền, 4 recovery behavior |
+| **Đồ án "Atlas Delivery"** | Ghép SLAM, AMCL, Nav2, BT và `patrol_node.py` tự viết, có log thời gian, quãng đường, số lần recovery |
 
 ## Vì sao học ở đây
 
@@ -82,16 +82,6 @@ nó tự đi làm nhiệm vụ:
 | 13 | Đồ án cuối khóa (Capstone) | 3 | ⭐ |
 
 🆓 đọc ngay, không cần tài khoản &nbsp;·&nbsp; 🔑 đăng nhập miễn phí &nbsp;·&nbsp; ⭐ hội viên
-
-<div align="center">
-
-### Hội viên trọn đời: ~~999.000đ~~ **599.000đ**, trả một lần
-
-Mở Module 8–13: SLAM, AMCL, Nav2, Behavior Tree và đồ án cuối khóa.
-
-<a href="https://atlasroboticsvn.com/vi/hoi-vien"><b>→ Trở thành hội viên</b></a> &nbsp;&nbsp;·&nbsp;&nbsp; <a href="https://atlasroboticsvn.com/vi/khoa-hoc/ros2-nav2/module-0/00-cai-dat"><b>Hoặc học thử Module 0 trước</b></a>
-
-</div>
 
 ## Chạy thử ngay
 
