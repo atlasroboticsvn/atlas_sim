@@ -106,7 +106,7 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard
 | Package | Vai trò | Module |
 |---|---|---|
 | `atlas_description` | URDF/XACRO, RViz xem robot (không cần Gazebo) | 3 |
-| `atlas_gazebo` | Spawn robot vào Gazebo Fortress, world (`empty.sdf`, `maze.sdf`), sensor LiDAR+IMU | 4, 6 |
+| `atlas_gazebo` | Spawn robot vào Gazebo Fortress, world (`empty.sdf`, `maze.sdf`, `office_world.sdf`, `office.sdf`, `warehouse.sdf`), sensor LiDAR+IMU | 4, 6 |
 | `atlas_control` | `ros2_control` + `diff_drive_controller`, robot chạy được bằng `/cmd_vel` | 5 |
 | `atlas_slam` | `slam_toolbox` tự vẽ bản đồ, lưu map; Nav2 (định vị AMCL hoặc slam_toolbox, costmap/planner/controller, 3 file config DWB/RPP/MPPI) | 8-10 |
 | `atlas_bringup` | Điểm khởi chạy chung: `bringup.launch.py` (mô phỏng), joystick teleop qua `twist_mux` | 7 (mở rộng) |
